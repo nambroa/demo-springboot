@@ -1,4 +1,4 @@
-package com.example.demoapp.api;
+package com.springnotes.api;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
