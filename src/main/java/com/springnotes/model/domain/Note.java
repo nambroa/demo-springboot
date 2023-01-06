@@ -1,4 +1,4 @@
-package com.springnotes.model;
+package com.springnotes.model.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,4 +19,9 @@ public class Note {
 
     @Column(nullable = true)
     private String description;
+
+    public Note(String title, String description){
+        this.title = title;
+        this.description = description;
+    }
 }

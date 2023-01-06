@@ -1,6 +1,6 @@
 package com.springnotes.repository;
 
-import com.springnotes.model.Note;
+import com.springnotes.model.domain.Note;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
