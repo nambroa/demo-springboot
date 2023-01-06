@@ -7,6 +7,9 @@ import com.springnotes.repository.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.StreamSupport;
+
 @Component
 public class NoteService {
 
@@ -25,5 +28,10 @@ public class NoteService {
         Note note =  this.noteFactory.createFrom(createNoteRequest);
         this.noteRepository.save(note);
         return note;
+    }
+
+    public List<Note> getAllNotes() {
+        Iterable<Note> notes =  this.noteRepository.findAll();
+        return StreamSupport.stream(notes.spliterator(), false).toList();
     }
 }
