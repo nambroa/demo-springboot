@@ -11,3 +11,11 @@ which is returned in the response with a 201 CREATED.
 ## DB
 
 The project uses an H2 DB which means it's in memory. All notes are lost upon application reset.
+
+## TODO
+
+- Support note creation via API
+- Support note editing via API
+- Support note deletion via API
+- Does Spring have a way to automate basic frontend to easily show notes? Thymeleaf? Search libraries.
+- Make the app interact with another microservice via a queue. For example: Microservice that manages users!

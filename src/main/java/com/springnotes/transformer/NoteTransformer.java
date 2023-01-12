@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class NoteTransformer {
     public NoteDTO transform(Note note) {
-        return null;
+        return new NoteDTO(note.getId(), note.getTitle(), note.getDescription());
     }
 }

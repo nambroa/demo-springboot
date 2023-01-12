@@ -24,4 +24,16 @@ public class Note {
     public Note() {
 
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public long getId() {
+        return id;
+    }
 }
