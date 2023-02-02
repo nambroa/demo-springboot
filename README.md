@@ -14,8 +14,11 @@ The project uses an H2 DB which means it's in memory. All notes are lost upon ap
 
 ## TODO
 
-- Support note creation via API
+- Initial app skeleton (DONE)
+- Support note creation via API (DONE)
+- Tests for note creation
 - Support note editing via API
 - Support note deletion via API
 - Does Spring have a way to automate basic frontend to easily show notes? Thymeleaf? Search libraries.
 - Make the app interact with another microservice via a queue. For example: Microservice that manages users!
+  (this point is a good time to move to a relational DB)
