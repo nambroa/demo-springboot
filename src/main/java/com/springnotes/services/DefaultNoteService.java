@@ -32,8 +32,7 @@ public class DefaultNoteService implements NoteService {
     }
 
     public List<Note> getAllNotes() {
-        Iterable<Note> notes = this.noteRepository.findAll();
-        return StreamSupport.stream(notes.spliterator(), false).toList();
+        return this.noteRepository.findAll();
     }
 
     public Optional<Note> getNote(String noteId) {

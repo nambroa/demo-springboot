@@ -1,22 +1,21 @@
-package com.springnotes.controller;
+package com.springnotes.services;
 
 
 import com.springnotes.SpringNotesApplication;
+import com.springnotes.model.api.CreateNoteRequest;
 import com.springnotes.model.domain.Note;
 import com.springnotes.repository.NoteRepository;
-import com.springnotes.services.NoteService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,15 +34,12 @@ We're using WebEnvironment.MOCK here so that the container will operate in a moc
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = SpringNotesApplication.class)
 @TestPropertySource(locations = "classpath:/application-integrationtest.properties")
-@AutoConfigureMockMvc
-public class NoteControllerTest {
+public class NoteServiceTest {
 
     private static final String NOTE_TITLE = "NoteTitle";
 
     private static final String NOTE_DESCRIPTION = "NoteDescription";
 
-    @Autowired
-    private MockMvc mvc;
 
     @MockBean
     private NoteRepository noteRepository;
@@ -57,13 +53,32 @@ public class NoteControllerTest {
     public void setUp() {
         Note note = new Note("NoteTitle", "NoteDescription");
         Mockito.when(noteRepository.findById(note.getId())).thenReturn(Optional.of(note));
+        Mockito.when(noteRepository.findAll()).thenReturn(List.of(note));
 
         testNote = note;
     }
 
     @Test
-    public void nothingTest() {
-        assert true;
+    public void givenExistingId_whenGettingOneNoteById_thenNoteShouldBeFound() {
+        Optional<Note> note = noteService.getNote(String.valueOf(testNote.getId()));
+
+        assert (note.isPresent());
+        assertThat(note.get().getTitle()).isEqualTo(NOTE_TITLE);
+        assertThat(note.get().getDescription()).isEqualTo(NOTE_DESCRIPTION);
     }
 
+    @Test
+    public void givenOneExistingNote_whenGettingAllNotes_thenNoteShouldBeFound() {
+        List<Note> notes = noteService.getAllNotes();
+
+        assertThat(notes).singleElement().isEqualTo(testNote);
+    }
+
+    @Test
+    public void givenValidNoteCreation_whenCreatingNote_thenNoteShouldBeCreated() {
+        Note note = noteService.createNote(new CreateNoteRequest("AnotherTitle", "AnotherDescription"));
+
+        assertThat(note.getTitle()).isEqualTo("AnotherTitle");
+        assertThat(note.getDescription()).isEqualTo("AnotherDescription");
+    }
 }
