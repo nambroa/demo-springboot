@@ -20,17 +20,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
-/*
-The integration tests need to start up a container to execute the test cases.
-Hence, some additional setup is required for this — all of this is easy in Spring Boot.
- */
-
-/*
-We can use the webEnvironment attribute of @SpringBootTest to configure our runtime environment.
-We're using WebEnvironment.MOCK here so that the container will operate in a mock servlet environment.
- */
-
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = SpringNotesApplication.class)
 @TestPropertySource(locations = "classpath:/application-integrationtest.properties")
