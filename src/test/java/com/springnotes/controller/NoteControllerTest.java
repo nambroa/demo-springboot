@@ -2,24 +2,23 @@ package com.springnotes.controller;
 
 
 import com.springnotes.SpringNotesApplication;
+import com.springnotes.model.api.CreateNoteRequest;
 import com.springnotes.model.domain.Note;
-import com.springnotes.repository.NoteRepository;
 import com.springnotes.services.NoteService;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
 
 
 /*
@@ -30,6 +29,9 @@ Hence, some additional setup is required for this — all of this is easy in Spr
 /*
 We can use the webEnvironment attribute of @SpringBootTest to configure our runtime environment.
 We're using WebEnvironment.MOCK here so that the container will operate in a mock servlet environment.
+
+TestPropertySource allows us to create a different profile for integration tests, thus making its run separate from
+other faster, smaller tests.
  */
 
 @RunWith(SpringRunner.class)
@@ -45,25 +47,29 @@ public class NoteControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @MockBean
-    private NoteRepository noteRepository;
-
     @Autowired
     private NoteService noteService;
 
     private Note testNote;
 
-    @Before
-    public void setUp() {
-        Note note = new Note("NoteTitle", "NoteDescription");
-        Mockito.when(noteRepository.findById(note.getId())).thenReturn(Optional.of(note));
-
-        testNote = note;
-    }
+//    @Before
+//    public void setUp() {
+//        Note note = new Note("NoteTitle", "NoteDescription");
+//        Mockito.when(noteRepository.findById(note.getId())).thenReturn(Optional.of(note));
+//
+//        testNote = note;
+//    }
 
     @Test
-    public void nothingTest() {
-        assert true;
+    public void givenOneNote_whenGetAllNotesRequest_thenReturnThatNote() throws Exception {
+        Note note = noteService.createNote(new CreateNoteRequest("AnotherTitle", "AnotherDescription"));
+
+        mvc.perform(get("/api/notes")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$[0].title", is("AnotherTitle")));
     }
 
 }
